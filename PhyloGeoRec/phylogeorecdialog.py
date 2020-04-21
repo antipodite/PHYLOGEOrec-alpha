@@ -24,11 +24,12 @@
 import csv, os, sys, string, Cookie, sha, time, random, cgi, urllib
 import datetime, StringIO, pickle, urllib2
 
-from PyQt4 import *
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
-from qgis.core import *
-from qgis.gui import *
+from PyQt4.QtCore import Qt, QObject, QFile, QDir, QSettings
+from PyQt4.QtGui import QIcon, QMenu, QAction, QToolButton, QStandardItem, QStandardItemModel, QColor
+from PyQt4.QtGui import QFileDialog, QMessageBox, QTreeWidgetItem, QTreeWidgetItemIterator, QDialog
+
+from qgis.core import QgsProject, QgsApplication, QgsMapLayer, QgsFeature, QgsRectangle, QgsPoint
+from qgis.gui import QgsMessageBar, QgsRubberBand, QgsMapToolEmitPoint
 
 from ui.ui_phylogeorecdialog import Ui_PhyloGeoRecDialogBase
 
@@ -160,7 +161,7 @@ class PhyloGeoRecDialog(QDialog):
         QObject.connect(self.ui.cmdBrwPhylo, SIGNAL("clicked()"), self.updatePhyloTreeView)
 
         # Build Table Viewer
-        self.model = QtGui.QStandardItemModel(self)
+        self.model = QStandardItemModel(self)
         self.ui.tableView_Relation.setModel(self.model)
         self.ui.tableView_Relation.horizontalHeader().setStretchLastSection(True)
 
@@ -527,7 +528,7 @@ class PhyloGeoRecDialog(QDialog):
             return self._settings
 
         # clean up settings - remove layers that don't exist in the layer registry
-        registry = QgsMapLayerRegistry.instance()
+        registry = QgsProject.instance()
         for itemId in [ObjectTreeItem.ITEM_OPTDEM, ObjectTreeItem.ITEM_POINT, ObjectTreeItem.ITEM_LINE, ObjectTreeItem.ITEM_POLYGON]:
             parent = self._settings.get(itemId, {})
             for layerId in parent.keys():
@@ -786,7 +787,7 @@ class PhyloGeoRecDialog(QDialog):
         else:
             parentId = parent.data(0, Qt.UserRole)
             layerId = currentItem.data(0, Qt.UserRole)
-            layer = QgsMapLayerRegistry.instance().mapLayer(unicode(layerId))
+            layer = QgsProject.instance().mapLayer(unicode(layerId))
             if layer is None:
                 return
 

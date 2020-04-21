@@ -20,8 +20,8 @@
  *                                                                         *
  ***************************************************************************/
 """
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+from PyQt4.QtCore import QFile, Qt
+from PyQt4.QtGui import QIcon, QAction
 
 # Initialize Qt resources from file resources_rc.py
 import ui.resources_rc
@@ -32,8 +32,8 @@ from ui.ui_phylogeorecdialog import Ui_PhyloGeoRecDialogBase
 import os
 
 # Import additional library
-from qgis.gui import *
-from qgis.core import *
+# from qgis.gui import *
+from qgis.core import QgsProject
 
 from phylogeorectools import logMessage, removeTemporaryOutputDir
 
